@@ -1,18 +1,27 @@
 class KubeScore < Formula
   desc "Kubernetes object analysis recommendations for improved reliability and security"
   homepage "https://kube-score.com"
-  url "https://github.com/zegl/kube-score/archive/refs/tags/v1.13.0.tar.gz"
-  sha256 "a09198f9a49c0008f9a34b418d85d3eb1299d0f04077e423eff30f1cad8abd43"
+  url "https://github.com/zegl/kube-score.git",
+      tag:      "v1.13.0",
+      revision: "d1ad91defc1a5814f7c7395ed64cd7039d259158"
   license "MIT"
   head "https://github.com/zegl/kube-score.git", branch: "master"
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args, "./cmd/kube-score"
+   ldflags = %W[
+     -s -w
+     -X main.version=#{version}
+     -X main.commit=#{Utils.git_head}
+     -X main.date=#{time.iso8601}
+   ].join(" ")
+   system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/kube-score"
   end
 
   test do
+    assert_match version.to_s, shell_output("#{bin}/kube-score version")
+    
     (testpath/"test.yaml").write <<~EOS
       apiVersion: v1
       kind: Service
