@@ -4,7 +4,7 @@ class KubeScore < Formula
   url "https://github.com/zegl/kube-score/archive/refs/tags/v1.13.0.tar.gz"
   sha256 "a09198f9a49c0008f9a34b418d85d3eb1299d0f04077e423eff30f1cad8abd43"
   license "MIT"
-  head "https://github.com/zegl/kube-score.git"
+  head "https://github.com/zegl/kube-score.git", branch: "master"
 
   depends_on "go" => :build
 
