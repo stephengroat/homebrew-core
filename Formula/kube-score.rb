@@ -10,18 +10,18 @@ class KubeScore < Formula
   depends_on "go" => :build
 
   def install
-   ldflags = %W[
-     -s -w
-     -X main.version=#{version}
-     -X main.commit=#{Utils.git_head}
-     -X main.date=#{time.iso8601}
-   ].join(" ")
-   system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/kube-score"
+    ldflags = %W[
+      -s -w
+      -X main.version=#{version}
+      -X main.commit=#{Utils.git_head}
+      -X main.date=#{time.iso8601}
+    ].join(" ")
+    system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/kube-score"
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/kube-score version")
-    
+
     (testpath/"test.yaml").write <<~EOS
       apiVersion: v1
       kind: Service
